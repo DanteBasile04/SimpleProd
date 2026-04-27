@@ -1,0 +1,23 @@
+--- # tasks/main.yml
+- name: Install Linuxbrew
+  ansible.builtin.shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: /home/linuxbrew/.linuxbrew/bin/brew
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Add brew to PATH in .bashrc
+  ansible.builtin.lineinfile:
+    path: /home/{{ user_name }}/.bashrc
+    line: 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"'
+    create: yes
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Add brew to PATH in .zshrc
+  ansible.builtin.lineinfile:
+    path: /home/{{ user_name }}/.zshrc
+    line: 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"'
+    create: yes
+  become: true
+  become_user: "{{ user_name }}"

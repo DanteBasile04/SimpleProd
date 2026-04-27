@@ -1,0 +1,14 @@
+--- # tasks/main.yml
+- name: Create monitoring script
+  ansible.builtin.template:
+    src: monitor.sh.j2
+    dest: /var/simpleprod/scripts/monitor.sh
+    mode: '0755'
+  become: true
+
+- name: Set up cron job
+  ansible.builtin.cron:
+    name: "Monitoring check"
+    minute: "*/15"
+    job: "/var/simpleprod/scripts/monitor.sh"
+  become: true

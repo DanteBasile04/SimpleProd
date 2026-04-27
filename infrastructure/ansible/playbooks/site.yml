@@ -1,0 +1,32 @@
+---
+- name: SimpleProd — Full site provisioning
+  hosts: all
+  become: true
+  roles:
+    - base-tools
+    - user
+    - ssh
+    - ufw
+    - fail2ban
+  # Path-specific roles are applied per group:
+
+- name: Web servers
+  hosts: web
+  become: true
+  roles:
+    - nginx-ssl
+    - nodejs
+
+- name: Database servers
+  hosts: db
+  become: true
+  roles:
+    - postgresql
+    - backups
+
+- name: App servers
+  hosts: app
+  become: true
+  roles:
+    - docker
+    - nodejs

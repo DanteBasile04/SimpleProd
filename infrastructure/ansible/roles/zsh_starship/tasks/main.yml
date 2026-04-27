@@ -1,0 +1,20 @@
+--- # tasks/main.yml
+- name: Install zsh
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Set zsh as default shell
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    shell: /bin/zsh
+  become: true
+
+- name: Install Starship
+  ansible.builtin.shell: curl -sS https://starship.rs/install.sh | sh
+  args:
+    creates: /home/{{ user_name }}/.config/starship.toml
+  become: true
+  become_user: "{{ user_name }}"

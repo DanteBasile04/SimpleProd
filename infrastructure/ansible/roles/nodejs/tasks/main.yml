@@ -1,0 +1,21 @@
+--- # tasks/main.yml
+- name: Install nvm
+  ansible.builtin.shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+  args:
+    creates: /home/{{ user_name }}/.nvm/nvm.sh
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Install Node.js LTS
+  ansible.builtin.shell: . /home/{{ user_name }}/.nvm/nvm.sh && nvm install --lts
+  args:
+    executable: /bin/bash
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Install PM2
+  community.general.npm:
+    name: pm2
+    global: yes
+  become: true
+  become_user: "{{ user_name }}"

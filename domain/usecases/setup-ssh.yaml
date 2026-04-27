@@ -1,0 +1,23 @@
+usecase: setup-ssh
+description: "Hardens SSH configuration by disabling password authentication and root login"
+
+execution_order: 3
+depends_on: [setup-user]
+
+preconditions:
+  - Non-root user with SSH key verified
+  - User has sudo privileges
+
+postconditions:
+  - SSH password authentication is disabled
+  - Root login is disabled
+  - SSH key authentication is enabled
+
+side_effects:
+  - files_modified: [/etc/ssh/sshd_config]
+
+rollback:
+  strategy: "Revert SSH configuration and enable password authentication"
+  steps:
+    - sudo cp /var/backups/simpleprod/sshd_config /etc/ssh/sshd_config
+    - sudo systemctl restart sshd

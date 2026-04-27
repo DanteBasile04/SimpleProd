@@ -1,0 +1,23 @@
+usecase: setup-docker
+description: "Installs Docker and Docker Compose"
+
+execution_order: 11
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - Docker is installed
+  - Docker Compose is installed
+
+side_effects:
+  - packages_installed: [docker, docker-compose]
+  - services_created: [docker]
+
+rollback:
+  strategy: "Uninstall Docker and Docker Compose"
+  steps:
+    - sudo apt-get remove docker docker-compose
+    - sudo apt-get autoremove

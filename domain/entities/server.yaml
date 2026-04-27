@@ -1,0 +1,40 @@
+# Server Entity
+# Defines the target VPS being provisioned
+
+entity: server
+description: "Represents the target VPS server being provisioned"
+
+schema:
+  hostname:
+    type: string
+    description: "Server hostname"
+    default: "simpleprod-server"
+  ip:
+    type: string
+    description: "Public IP address"
+    required: true
+  os:
+    type: string
+    description: "Operating system (ubuntu/debian)"
+    default: "ubuntu"
+  os_version:
+    type: string
+    description: "OS version (e.g., 22.04, 12)"
+  ram_mb:
+    type: integer
+    description: "Available RAM in MB"
+    minimum: 1024
+  disk_gb:
+    type: integer
+    description: "Available disk space in GB"
+    minimum: 10
+  ssh_port:
+    type: integer
+    description: "SSH port"
+    default: 22
+
+validation:
+  - os MUST be ubuntu or debian
+  - os_version MUST be 22.04+ for ubuntu, 12+ for debian
+  - ram_mb MUST be >= 1024
+  - disk_gb MUST be >= 10

@@ -1,0 +1,19 @@
+--- # tasks/main.yml
+- name: Install base tools
+  ansible.builtin.apt:
+    name:
+      - git
+      - curl
+      - wget
+      - vim
+      - htop
+      - tmux
+      - unzip
+      - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+      - gnupg
+      - lsb-release
+    state: present
+    update_cache: yes
+  become: true

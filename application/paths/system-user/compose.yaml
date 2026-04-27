@@ -1,0 +1,24 @@
+name: "System User isolation path"
+description:
+  en: "System user-based isolation with separate Linux users for each client"
+  es: "Isolación basada en usuarios del sistema con usuarios Linux separados para cada cliente"
+required_components:
+  - base-tools
+  - user
+  - ssh
+  - ufw
+  - fail2ban
+  - nginx-ssl
+  - nodejs
+  - homebrew
+  - zsh-starship
+  - ai-tools
+  - postgresql
+  - backups
+  - monitoring
+  - logrotate
+path_specific_notes:
+  - "Each client gets their own Linux user"
+  - "Systemd services for each client"
+  - "Separate PostgreSQL databases for each client"
+  - "Home directories with proper permissions"

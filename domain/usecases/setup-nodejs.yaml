@@ -1,0 +1,23 @@
+usecase: setup-nodejs
+description: "Installs nvm, Node.js, and PM2"
+
+execution_order: 7
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - nvm is installed
+  - Node.js is installed
+  - PM2 is installed
+
+side_effects:
+  - packages_installed: [nvm, nodejs, pm2]
+
+rollback:
+  strategy: "Uninstall nvm, Node.js, and PM2"
+  steps:
+    - sudo apt-get remove nvm nodejs pm2
+    - sudo apt-get autoremove

@@ -1,0 +1,22 @@
+--- # tasks/main.yml
+- name: Create backup scripts directory
+  ansible.builtin.file:
+    path: /var/simpleprod/scripts/backups
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Create backup script
+  ansible.builtin.template:
+    src: backup.sh.j2
+    dest: /var/simpleprod/scripts/backups/backup.sh
+    mode: '0755'
+  become: true
+
+- name: Set up cron job
+  ansible.builtin.cron:
+    name: "Daily backup"
+    minute: "0"
+    hour: "2"
+    job: "/var/simpleprod/scripts/backups/backup.sh"
+  become: true

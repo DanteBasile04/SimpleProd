@@ -1,0 +1,24 @@
+usecase: setup-fail2ban
+description: "Installs and configures fail2ban to monitor SSH attempts"
+
+execution_order: 5
+depends_on: [setup-ssh, setup-ufw]
+
+preconditions:
+  - SSH is configured
+  - UFW is enabled
+  - User has sudo privileges
+
+postconditions:
+  - fail2ban is installed
+  - fail2ban is monitoring SSH on the correct port
+
+side_effects:
+  - packages_installed: [fail2ban]
+  - files_modified: [/etc/fail2ban/jail.local]
+
+rollback:
+  strategy: "Uninstall fail2ban"
+  steps:
+    - sudo apt-get remove fail2ban
+    - sudo apt-get autoremove

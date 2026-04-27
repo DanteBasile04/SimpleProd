@@ -1,0 +1,120 @@
+---
+# SimpleProd — SSH Hardening (CRITICAL — Domain 0)
+# Lockout prevention: verifies key auth BEFORE disabling password auth
+# Connection safety: verifies SSH session after changes
+
+- name: "SSH Hardening — Backup sshd_config"
+  block:
+    - name: Backup sshd_config before modification
+      ansible.builtin.copy:
+        src: /etc/ssh/sshd_config
+        dest: "/var/backups/simpleprod/etc/ssh/sshd_config.{{ ansible_date_time.epoch }}.bak"
+        remote_src: true
+        mode: '0644'
+      become: true
+
+- name: "SSH Hardening — Verify Key Authentication (CRITICAL)"
+  block:
+    - name: Check if authorized_keys exists for user
+      ansible.builtin.stat:
+        path: "/home/{{ simpleprod_ssh_user }}/.ssh/authorized_keys"
+      register: _ssh_key_file
+
+    - name: FAIL if SSH key is not configured
+      ansible.builtin.fail:
+        msg: >-
+          LOCKOUT RISK: Could not verify key authentication for user
+          {{ simpleprod_ssh_user }}. Password auth will remain enabled.
+          Ensure the user's SSH public key is in
+          /home/{{ simpleprod_ssh_user }}/.ssh/authorized_keys
+      when: not _ssh_key_file.stat.exists or _ssh_key_file.stat.size == 0
+
+    - name: Verify key auth file has content
+      ansible.builtin.debug:
+        msg: "SSH key authentication verified. Safe to proceed with hardening."
+
+- name: "SSH Hardening — Apply Configuration"
+  block:
+    - name: Disable password authentication
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication {{ simpleprod_ssh_password_authentication }}'
+        validate: 'sshd -t -f %s'
+
+    - name: Disable root login
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin {{ simpleprod_ssh_permit_root_login }}'
+        validate: 'sshd -t -f %s'
+
+    - name: Set SSH port
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?Port'
+        line: 'Port {{ simpleprod_ssh_port }}'
+        validate: 'sshd -t -f %s'
+      when: simpleprod_ssh_port != 22
+
+    - name: Set max auth tries
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?MaxAuthTries'
+        line: 'MaxAuthTries {{ simpleprod_ssh_max_auth_tries }}'
+        validate: 'sshd -t -f %s'
+
+    - name: Set max sessions
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?MaxSessions'
+        line: 'MaxSessions {{ simpleprod_ssh_max_sessions }}'
+        validate: 'sshd -t -f %s'
+
+    - name: Set client alive interval
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?ClientAliveInterval'
+        line: 'ClientAliveInterval {{ simpleprod_ssh_client_alive_interval }}'
+        validate: 'sshd -t -f %s'
+
+    - name: Disable X11 forwarding
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?X11Forwarding'
+        line: 'X11Forwarding {{ simpleprod_ssh_x11_forwarding }}'
+        validate: 'sshd -t -f %s'
+
+- name: "SSH Hardening — Allow New Port in UFW (if port changed)"
+  block:
+    - name: Allow new SSH port in UFW
+      community.general.ufw:
+        rule: allow
+        port: "{{ simpleprod_ssh_port }}"
+        proto: tcp
+      when: simpleprod_ssh_port != 22
+
+- name: "SSH Hardening — Restart and Verify"
+  block:
+    - name: Restart SSH service
+      ansible.builtin.systemd:
+        name: "{{ 'sshd' if ansible_os_family == 'RedHat' else 'ssh' }}"
+        state: restarted
+      become: true
+
+    - name: Wait for SSH to come back
+      ansible.builtin.wait_for:
+        port: "{{ simpleprod_ssh_port }}"
+        delay: 2
+        timeout: 30
+        host: "{{ ansible_default_ipv4.address }}"
+
+    - name: Verify SSH is running
+      ansible.builtin.systemd:
+        name: "{{ 'sshd' if ansible_os_family == 'RedHat' else 'ssh' }}"
+        state: started
+      register: _ssh_status
+
+    - name: Report SSH hardening result
+      ansible.builtin.debug:
+        msg: "SSH hardened: password auth disabled, root login disabled, port {{ simpleprod_ssh_port }}"

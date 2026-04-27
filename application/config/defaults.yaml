@@ -1,0 +1,98 @@
+# SimpleProd Default Configuration
+# This file defines all default values for SimpleProd provisioning.
+
+language: en              # en | es — user-facing messages
+username: deploy          # non-root user to create
+ssh_port: 22              # SSH port (changed during hardening if needed)
+dry_run: false            # preview mode — no system changes
+path: null                # docker | system-user | hybrid | null (triggers wizard)
+
+components:
+  - base-tools
+  - user
+  - ssh
+  - ufw
+  - fail2ban
+  - nginx-ssl
+  - nodejs
+  - homebrew
+  - zsh-starship
+  - ai-tools
+  - docker
+  - postgresql
+  - backups
+  - monitoring
+  - logrotate
+
+clients: []               # populated via wizard or config file
+
+secrets_dir: /var/simpleprod/secrets
+backups_dir: /var/backups/simpleprod
+
+# Execution order enforced by orchestrator
+# DO NOT change this order — Domain 0 safety requirements depend on it
+execution_order:
+  - base-tools
+  - user
+  - ssh
+  - ufw
+  - fail2ban
+  - nginx-ssl
+  - nodejs
+  - homebrew
+  - zsh-starship
+  - ai-tools
+  - docker
+  - postgresql
+  - backups
+  - monitoring
+  - logrotate
+
+# Dependencies — use case MUST wait for its depends_on to complete
+dependencies:
+  base-tools: []
+  user: [base-tools]
+  ssh: [user]
+  ufw: [ssh]
+  fail2ban: [ssh, ufw]
+  nginx-ssl: [ufw]
+  nodejs: [base-tools]
+  homebrew: [base-tools]
+  zsh-starship: [base-tools]
+  ai-tools: [base-tools]
+  docker: [base-tools]
+  postgresql: [base-tools]
+  backups: [postgresql]
+  monitoring: [base-tools]
+  logrotate: [nginx-ssl]
+
+# Path requirements — which components each path needs
+path_requirements:
+  docker:
+    - base-tools
+    - user
+    - ssh
+    - ufw
+    - fail2ban
+    - nginx-ssl
+    - docker
+    - nodejs
+  system-user:
+    - base-tools
+    - user
+    - ssh
+    - ufw
+    - fail2ban
+    - nginx-ssl
+    - postgresql
+    - nodejs
+  hybrid:
+    - base-tools
+    - user
+    - ssh
+    - ufw
+    - fail2ban
+    - nginx-ssl
+    - docker
+    - postgresql
+    - nodejs

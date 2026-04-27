@@ -1,0 +1,95 @@
+# SimpleProd Messages — Spanish (Español Rioplatense)
+# Todos los mensajes orientados al usuario en español
+
+# Pre-flight checks
+preflight:
+  checking: "Ejecutando verificaciones previas..."
+  root_required: "ERROR: Este script debe ejecutarse como root o con sudo."
+  os_check: "Verificando sistema operativo..."
+  os_supported: "Sistema operativo soportado: {os} {version}"
+  os_unsupported: "ERROR: Sistema operativo no soportado. SimpleProd requiere Ubuntu 22.04+ o Debian 12+."
+  internet_check: "Verificando conectividad a internet..."
+  internet_ok: "Conectividad: OK"
+  internet_fail: "ERROR: Sin conectividad a internet. No se puede continuar."
+  disk_check: "Verificando espacio en disco..."
+  disk_ok: "Espacio en disco: {free}GB libres (mínimo: 10GB)"
+  disk_fail: "ERROR: Espacio insuficiente. {free}GB libres, se necesitan al menos 10GB."
+  ram_check: "Verificando memoria RAM..."
+  ram_ok: "RAM: {total}MB disponibles (mínimo: 1GB)"
+  ram_fail: "ERROR: RAM insuficiente. {total}MB disponibles, se necesitan al menos 1GB."
+  all_passed: "Todas las verificaciones previas pasaron. Continuando con el provisionamiento."
+
+# Execution order
+order:
+  enforcing: "Aplicando orden de ejecución (requisitos de seguridad Domain 0)..."
+  step_order: "Paso {n}: {step}"
+  dependency_wait: "Esperando que la dependencia '{dep}' se complete antes de '{step}'..."
+
+# Lockout prevention
+lockout:
+  verifying_key: "Verificando autenticación por clave SSH antes de deshabilitar password auth..."
+  key_verified: "Autenticación por clave verificada. Procediendo con el hardening."
+  key_failed: "RIESGO DE LOCKOUT: No se pudo verificar la autenticación por clave. Password auth permanece habilitado."
+  session_check: "Verificando que la sesión SSH siga activa..."
+  session_ok: "Sesión SSH activa. Seguro para continuar."
+  session_lost: "AVISO: La sesión SSH puede haberse caído. Reconectá por favor."
+
+# Firewall safety
+firewall:
+  allowing_ssh: "Permitiendo SSH (puerto {port}) antes de habilitar la política deny-all..."
+  ssh_rule_added: "Regla SSH añadida a UFW."
+  enabling_deny: "Habilitando deny-all por defecto..."
+  ufw_enabled: "UFW habilitado con SSH permitido en el puerto {port}."
+
+# Backup
+backup:
+  creating: "Creando backup de {file}..."
+  created: "Backup creado: {backup_file}"
+  restoring: "Restaurando desde backup: {backup_file}..."
+  restored: "Restaurado: {original_file}"
+  cleanup: "Limpiando backups anteriores a {days} días..."
+
+# Step execution
+step:
+  starting: "Iniciando: {step}..."
+  completed: "Completado: {step} ✓"
+  failed: "FALLÓ: {step}"
+  skipped: "OMITIDO: {step} (dependencia no cumplida)"
+  dry_run: "SIMULACIÓN: {step} — {description}"
+
+# Failure handling
+failure:
+  header: "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  message: "El paso '{step}' falló con el error:"
+  error: "{error}"
+  options: "Elegí una acción:"
+  retry: "[R] Reintentar — ejecutar este paso de nuevo"
+  skip: "[S] Saltar — continuar sin este paso (AVISO: los pasos dependientes también se saltarán)"
+  rollback: "[B] Rollback — revertir todos los cambios hechos en esta ejecución"
+  abort: "[A] Abortar — detener el provisionamiento inmediatamente"
+
+# Existing service detection
+existing:
+  detected: "AVISO: {service} ya está instalado."
+  options: "Elegí una acción:"
+  preserve: "[P] Preservar — mantener la configuración existente"
+  overwrite: "[O] Sobreescribir — hacer backup, luego aplicar la config de SimpleProd"
+  merge: "[M] Fusionar — aplicar la config de SimpleProd sobre la existente"
+
+# Configuration
+config:
+  language: "Idioma: Español (es)"
+  username: "Usuario: {username}"
+  path: "Camino de deployment: {path}"
+  dry_run: "MODO SIMULACIÓN — no se harán cambios"
+  wizard_prompt: "Asistente de Configuración SimpleProd"
+
+# Secrets
+secrets:
+  stored: "Secrets guardados de forma segura en: {path}"
+  not_logged: "NOTA: Las contraseñas nunca se muestran en los logs."
+
+# Progress
+progress:
+  overall: "Progreso general: {completed}/{total} pasos"
+  percentage: "{percent}% completado"

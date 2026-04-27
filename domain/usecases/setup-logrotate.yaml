@@ -1,0 +1,21 @@
+usecase: setup-logrotate
+description: "Configures logrotate for Nginx and application logs"
+
+execution_order: 15
+depends_on: [setup-nginx-ssl]
+
+preconditions:
+  - Nginx is installed
+  - User has sudo privileges
+
+postconditions:
+  - logrotate is configured for Nginx and application logs
+
+side_effects:
+  - files_modified: [/etc/logrotate.d/nginx, /etc/logrotate.d/app]
+
+rollback:
+  strategy: "Remove logrotate configurations"
+  steps:
+    - sudo rm /etc/logrotate.d/nginx
+    - sudo rm /etc/logrotate.d/app

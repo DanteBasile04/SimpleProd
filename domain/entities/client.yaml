@@ -1,0 +1,46 @@
+# Client Entity
+# Defines a client application to be deployed on the server
+
+entity: client
+description: "Represents a client application with its own isolated environment"
+
+schema:
+  name:
+    type: string
+    description: "Client identifier (alphanumeric, used for user/container names)"
+    pattern: "^[a-z][a-z0-9-]*$"
+    required: true
+  domain:
+    type: string
+    description: "Public domain for this client"
+    required: true
+  port:
+    type: integer
+    description: "Application port"
+    default: 3000
+  deployment_path:
+    type: string
+    description: "Which isolation path to use"
+    enum: [docker, system-user, hybrid]
+    required: true
+  database:
+    type: object
+    description: "Database configuration for this client"
+    properties:
+      name:
+        type: string
+        description: "Database name"
+        default: "client_{name}"
+      user:
+        type: string
+        description: "Database user"
+        default: "{name}"
+      password_file:
+        type: string
+        description: "Path to secrets file containing DB password"
+        default: "/var/simpleprod/secrets/{name}.env"
+
+validation:
+  - name MUST be lowercase alphanumeric with hyphens
+  - domain MUST be a valid domain name
+  - deployment_path MUST be one of docker, system-user, hybrid

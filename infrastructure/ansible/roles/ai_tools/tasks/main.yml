@@ -1,0 +1,13 @@
+--- # tasks/main.yml
+- name: Install opencode CLI
+  ansible.builtin.shell: curl -sS https://opencode.ai/install.sh | sh
+  args:
+    creates: /usr/local/bin/opencode
+  become: true
+
+- name: Install GitHub CLI
+  ansible.builtin.apt:
+    name: gh
+    state: present
+    update_cache: yes
+  become: true

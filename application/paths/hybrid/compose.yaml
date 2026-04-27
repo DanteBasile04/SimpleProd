@@ -1,0 +1,25 @@
+name: "Hybrid path"
+description:
+  en: "Hybrid approach with Docker containers for apps and native PostgreSQL for databases"
+  es: "Enfoque híbrido con contenedores Docker para aplicaciones y PostgreSQL nativo para bases de datos"
+required_components:
+  - base-tools
+  - user
+  - ssh
+  - ufw
+  - fail2ban
+  - nginx-ssl
+  - nodejs
+  - homebrew
+  - zsh-starship
+  - ai-tools
+  - docker
+  - postgresql
+  - backups
+  - monitoring
+  - logrotate
+path_specific_notes:
+  - "Docker containers for application services"
+  - "Native PostgreSQL for database services"
+  - "Network isolation between containers and host"
+  - "Shared storage volumes for shared assets"

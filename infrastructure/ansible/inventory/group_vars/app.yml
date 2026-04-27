@@ -1,0 +1,4 @@
+# App server configuration
+docker_version: "20.10"
+docker_compose_version: "1.29"
+nodejs_version: "16.x"

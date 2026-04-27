@@ -1,0 +1,22 @@
+usecase: setup-ai-tools
+description: "Installs Opencode CLI and GitHub CLI"
+
+execution_order: 10
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - Opencode CLI is installed
+  - GitHub CLI is installed
+
+side_effects:
+  - packages_installed: [opencode, gh]
+
+rollback:
+  strategy: "Uninstall Opencode CLI and GitHub CLI"
+  steps:
+    - sudo apt-get remove opencode gh
+    - sudo apt-get autoremove

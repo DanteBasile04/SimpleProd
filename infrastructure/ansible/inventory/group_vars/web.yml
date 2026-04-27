@@ -1,0 +1,5 @@
+# Web server configuration
+nginx_ssl: true
+nodejs_version: "16.x"
+ssl_cert_path: "/etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem"
+ssl_key_path: "/etc/letsencrypt/live/{{ inventory_hostname }}/privkey.pem"

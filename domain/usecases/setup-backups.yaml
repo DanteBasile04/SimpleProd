@@ -1,0 +1,23 @@
+usecase: setup-backups
+description: "Creates backup scripts and sets up a cron job for automated backups"
+
+execution_order: 13
+depends_on: [setup-postgresql]
+
+preconditions:
+  - PostgreSQL is installed
+  - User has sudo privileges
+
+postconditions:
+  - Backup scripts are created
+  - Cron job is set up for automated backups
+  - Credentials are stored securely
+
+side_effects:
+  - files_modified: [/etc/cron.d/backup]
+
+rollback:
+  strategy: "Remove backup scripts and cron job"
+  steps:
+    - sudo rm /etc/cron.d/backup
+    - sudo rm /usr/local/bin/backup_script.sh

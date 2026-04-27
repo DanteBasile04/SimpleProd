@@ -1,0 +1,95 @@
+# SimpleProd Messages — English
+# All user-facing messages in English
+
+# Pre-flight checks
+preflight:
+  checking: "Running pre-flight checks..."
+  root_required: "ERROR: This script must be run as root or with sudo."
+  os_check: "Checking operating system..."
+  os_supported: "OS supported: {os} {version}"
+  os_unsupported: "ERROR: Unsupported OS. SimpleProd requires Ubuntu 22.04+ or Debian 12+."
+  internet_check: "Checking internet connectivity..."
+  internet_ok: "Internet connectivity: OK"
+  internet_fail: "ERROR: No internet connectivity. Cannot proceed."
+  disk_check: "Checking disk space..."
+  disk_ok: "Disk space: {free}GB free (minimum: 10GB)"
+  disk_fail: "ERROR: Insufficient disk space. {free}GB free, need at least 10GB."
+  ram_check: "Checking RAM..."
+  ram_ok: "RAM: {total}MB available (minimum: 1GB)"
+  ram_fail: "ERROR: Insufficient RAM. {total}MB available, need at least 1GB."
+  all_passed: "All pre-flight checks passed. Proceeding with provisioning."
+
+# Execution order
+order:
+  enforcing: "Enforcing execution order (Domain 0 safety)..."
+  step_order: "Step {n}: {step}"
+  dependency_wait: "Waiting for dependency '{dep}' to complete before '{step}'..."
+
+# Lockout prevention
+lockout:
+  verifying_key: "Verifying SSH key authentication before disabling password auth..."
+  key_verified: "SSH key authentication verified. Proceeding with hardening."
+  key_failed: "LOCKOUT RISK: Could not verify key authentication. Password auth kept enabled."
+  session_check: "Verifying SSH session remains active..."
+  session_ok: "SSH session active. Safe to proceed."
+  session_lost: "WARNING: SSH session may have dropped. Please reconnect."
+
+# Firewall safety
+firewall:
+  allowing_ssh: "Allowing SSH (port {port}) before enabling deny-all policy..."
+  ssh_rule_added: "SSH rule added to UFW."
+  enabling_deny: "Enabling default deny incoming..."
+  ufw_enabled: "UFW enabled with SSH allowed on port {port}."
+
+# Backup
+backup:
+  creating: "Creating backup of {file}..."
+  created: "Backup created: {backup_file}"
+  restoring: "Restoring from backup: {backup_file}..."
+  restored: "Restored: {original_file}"
+  cleanup: "Cleaning up backups older than {days} days..."
+
+# Step execution
+step:
+  starting: "Starting: {step}..."
+  completed: "Completed: {step} ✓"
+  failed: "FAILED: {step}"
+  skipped: "SKIPPED: {step} (dependency not met)"
+  dry_run: "DRY RUN: {step} — {description}"
+
+# Failure handling
+failure:
+  header: "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  message: "Step '{step}' failed with error:"
+  error: "{error}"
+  options: "Choose an action:"
+  retry: "[R] Retry — run this step again"
+  skip: "[S] Skip — continue without this step (WARNING: dependent steps will also be skipped)"
+  rollback: "[B] Rollback — revert all changes made in this run"
+  abort: "[A] Abort — stop provisioning immediately"
+
+# Existing service detection
+existing:
+  detected: "WARNING: {service} is already installed."
+  options: "Choose an action:"
+  preserve: "[P] Preserve — keep existing configuration"
+  overwrite: "[O] Overwrite — backup existing, then apply SimpleProd config"
+  merge: "[M] Merge — apply SimpleProd settings on top of existing config"
+
+# Configuration
+config:
+  language: "Language: English (en)"
+  username: "Username: {username}"
+  path: "Deployment path: {path}"
+  dry_run: "DRY RUN MODE — no changes will be made"
+  wizard_prompt: "SimpleProd Configuration Wizard"
+
+# Secrets
+secrets:
+  stored: "Secrets stored securely in: {path}"
+  not_logged: "NOTE: Passwords are never displayed in logs."
+
+# Progress
+progress:
+  overall: "Overall progress: {completed}/{total} steps"
+  percentage: "{percent}% complete"

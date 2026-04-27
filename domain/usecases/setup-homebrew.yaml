@@ -1,0 +1,20 @@
+usecase: setup-homebrew
+description: "Installs Linuxbrew in the home directory"
+
+execution_order: 8
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - Linuxbrew is installed
+
+side_effects:
+  - files_modified: [~/.bashrc, ~/.zshrc]
+
+rollback:
+  strategy: "Uninstall Linuxbrew"
+  steps:
+    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"

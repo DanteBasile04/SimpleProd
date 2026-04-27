@@ -1,0 +1,22 @@
+usecase: setup-ufw
+description: "Configures UFW firewall to allow SSH and deny all other traffic"
+
+execution_order: 4
+depends_on: [setup-ssh]
+
+preconditions:
+  - SSH port allowed before deny-all
+  - User has sudo privileges
+
+postconditions:
+  - UFW is enabled
+  - SSH port is allowed
+  - All other traffic is denied
+
+side_effects:
+  - services_created: [ufw]
+
+rollback:
+  strategy: "Disable UFW"
+  steps:
+    - sudo ufw disable

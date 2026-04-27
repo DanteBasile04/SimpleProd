@@ -1,0 +1,22 @@
+usecase: setup-monitoring
+description: "Sets up disk, CPU, and memory monitoring with alerts"
+
+execution_order: 14
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - Monitoring is set up
+  - Alerts are configured
+
+side_effects:
+  - packages_installed: [htop, glances]
+
+rollback:
+  strategy: "Uninstall monitoring tools"
+  steps:
+    - sudo apt-get remove htop glances
+    - sudo apt-get autoremove

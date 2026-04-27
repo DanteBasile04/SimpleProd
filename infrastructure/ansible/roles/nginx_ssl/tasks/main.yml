@@ -1,0 +1,38 @@
+--- # tasks/main.yml
+- name: Install nginx and certbot
+  ansible.builtin.apt:
+    name:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Check if nginx is already configured
+  ansible.builtin.stat:
+    path: /etc/nginx/sites-available/default
+  register: nginx_config
+
+- name: Backup existing nginx config
+  ansible.builtin.copy:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-available/default.bak
+    remote_src: yes
+  when: nginx_config.stat.exists
+  become: true
+
+- name: Configure reverse proxy
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Restart nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+  become: true

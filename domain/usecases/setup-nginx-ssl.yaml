@@ -1,0 +1,25 @@
+usecase: setup-nginx-ssl
+description: "Installs Nginx and certbot, and sets up SSL certificates"
+
+execution_order: 6
+depends_on: [setup-ufw]
+
+preconditions:
+  - UFW is enabled
+  - User has sudo privileges
+
+postconditions:
+  - Nginx is installed and running
+  - certbot is installed
+  - SSL certificates are set up
+
+side_effects:
+  - packages_installed: [nginx, certbot]
+  - services_created: [nginx]
+  - files_modified: [/etc/nginx/sites-available/default]
+
+rollback:
+  strategy: "Uninstall Nginx and certbot"
+  steps:
+    - sudo apt-get remove nginx certbot
+    - sudo apt-get autoremove

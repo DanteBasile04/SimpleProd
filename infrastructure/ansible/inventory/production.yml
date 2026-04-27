@@ -1,0 +1,12 @@
+all:
+  children:
+    web:
+      hosts:
+        web1.example.com:
+        web2.example.com:
+    db:
+      hosts:
+        db1.example.com:
+    app:
+      hosts:
+        app1.example.com:

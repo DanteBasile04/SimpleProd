@@ -1,0 +1,23 @@
+usecase: setup-user
+description: "Creates a non-root user with sudo privileges and sets up SSH key authentication"
+
+execution_order: 2
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - Non-root user is created
+  - User has sudo privileges
+  - SSH key is set up for the user
+
+side_effects:
+  - files_modified: [/etc/sudoers]
+
+rollback:
+  strategy: "Remove the non-root user and revert sudoers file"
+  steps:
+    - sudo deluser --remove-home username
+    - sudo cp /var/backups/simpleprod/sudoers /etc/sudoers

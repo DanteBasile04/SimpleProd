@@ -1,0 +1,23 @@
+usecase: setup-zsh-starship
+description: "Installs Zsh and Starship prompt"
+
+execution_order: 9
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - Zsh is installed
+  - Starship prompt is installed
+
+side_effects:
+  - packages_installed: [zsh, starship]
+  - files_modified: [~/.zshrc]
+
+rollback:
+  strategy: "Uninstall Zsh and Starship"
+  steps:
+    - sudo apt-get remove zsh starship
+    - sudo apt-get autoremove

@@ -1,0 +1,18 @@
+--- # tasks/main.yml
+- name: Configure logrotate for nginx
+  ansible.builtin.template:
+    src: nginx.j2
+    dest: /etc/logrotate.d/nginx
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Configure logrotate for app logs
+  ansible.builtin.template:
+    src: app.j2
+    dest: /etc/logrotate.d/app
+    owner: root
+    group: root
+    mode: '0644'
+  become: true

@@ -1,0 +1,25 @@
+usecase: setup-postgresql
+description: "Installs PostgreSQL, creates a database and user, and stores the password securely"
+
+execution_order: 12
+depends_on: [setup-base-tools]
+
+preconditions:
+  - Base tools are installed
+  - User has sudo privileges
+
+postconditions:
+  - PostgreSQL is installed
+  - Database and user are created
+  - Password is stored securely
+
+side_effects:
+  - packages_installed: [postgresql]
+  - files_modified: [/etc/postgresql/14/main/pg_hba.conf]
+
+rollback:
+  strategy: "Uninstall PostgreSQL and remove the database and user"
+  steps:
+    - sudo apt-get remove postgresql
+    - sudo apt-get autoremove
+    - sudo userdel postgres

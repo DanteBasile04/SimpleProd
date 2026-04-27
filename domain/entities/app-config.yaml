@@ -1,0 +1,84 @@
+# AppConfig Entity
+# Cross-cutting configuration for SimpleProd
+
+entity: app_config
+description: "Global configuration controlling language, username, dry-run, and component selection"
+
+schema:
+  language:
+    type: string
+    description: "User-facing language for messages and prompts"
+    enum: [en, es]
+    default: en
+  username:
+    type: string
+    description: "Non-root user to create on the server"
+    default: deploy
+  ssh_port:
+    type: integer
+    description: "SSH port for the server"
+    default: 22
+  dry_run:
+    type: boolean
+    description: "If true, display actions without executing them"
+    default: false
+  path:
+    type: string
+    description: "Deployment path (null triggers wizard)"
+    enum: [docker, system-user, hybrid, null]
+    default: null
+  components:
+    type: array
+    description: "List of components to install"
+    items:
+      type: string
+      enum:
+        - base-tools
+        - user
+        - ssh
+        - ufw
+        - fail2ban
+        - nginx-ssl
+        - nodejs
+        - homebrew
+        - zsh-starship
+        - ai-tools
+        - docker
+        - postgresql
+        - backups
+        - monitoring
+        - logrotate
+    default:
+      - base-tools
+      - user
+      - ssh
+      - ufw
+      - fail2ban
+      - nginx-ssl
+      - nodejs
+      - homebrew
+      - zsh-starship
+      - ai-tools
+      - docker
+      - postgresql
+      - backups
+      - monitoring
+      - logrotate
+  clients:
+    type: array
+    description: "List of client applications to deploy"
+    items:
+      type: object
+  secrets_dir:
+    type: string
+    description: "Directory for storing secrets"
+    default: /var/simpleprod/secrets
+  backups_dir:
+    type: string
+    description: "Directory for pre-change backups"
+    default: /var/backups/simpleprod
+
+validation:
+  - If path is null, wizard MUST be invoked (requires interactive TTY)
+  - If dry_run is true, NO system changes SHALL be made
+  - If a component depends on another unselected component, it SHALL be auto-included with warning

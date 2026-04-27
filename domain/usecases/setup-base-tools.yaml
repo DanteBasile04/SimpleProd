@@ -1,0 +1,22 @@
+usecase: setup-base-tools
+description: "Installs essential development tools including git, curl, wget, vim, and htop"
+
+execution_order: 1
+depends_on: []
+
+preconditions:
+  - System is a clean Ubuntu 22.04 LTS installation
+  - User has sudo privileges
+
+postconditions:
+  - git, curl, wget, vim, and htop are installed and available
+  - Package manager is updated
+
+side_effects:
+  - packages_installed: [git, curl, wget, vim, htop]
+
+rollback:
+  strategy: "Uninstall the packages using the package manager"
+  steps:
+    - sudo apt-get remove git curl wget vim htop
+    - sudo apt-get autoremove

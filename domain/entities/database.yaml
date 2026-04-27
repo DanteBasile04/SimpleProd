@@ -1,0 +1,39 @@
+# Database Entity
+# Defines a database instance (PostgreSQL or SQLite)
+
+entity: database
+description: "Represents a database instance, either PostgreSQL or SQLite"
+
+schema:
+  type:
+    type: string
+    description: "Database type"
+    enum: [postgresql, sqlite]
+    required: true
+  name:
+    type: string
+    description: "Database name"
+    required: true
+  user:
+    type: string
+    description: "Database user (PostgreSQL only)"
+  password_file:
+    type: string
+    description: "Path to secrets file containing credentials"
+    default: "/var/simpleprod/secrets/{client_name}.env"
+  host:
+    type: string
+    description: "Database host"
+    default: "localhost"
+  port:
+    type: integer
+    description: "Database port"
+    default: 5432
+  path:
+    type: string
+    description: "File path (SQLite only)"
+
+validation:
+  - If type is postgresql, user and password_file MUST be provided
+  - If type is sqlite, path MUST be provided
+  - Credentials MUST be stored with mode 600 (see Domain 0: Secret Management)

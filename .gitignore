@@ -1,0 +1,37 @@
+# SimpleProd — Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv/
+
+# Ansible
+*.retry
+
+# Backups (local, not committed)
+/var/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Engram / SDD
+.atl/
+
+# Secrets (CRITICAL — never commit)
+*.env
+secrets/
+/var/simpleprod/secrets/
+
+# Build artifacts
+dist/
+*.tar.gz

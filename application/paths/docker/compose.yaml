@@ -1,0 +1,23 @@
+name: "Docker isolation path"
+description:
+  en: "Docker-based isolation with separate containers for each client"
+  es: "Isolación basada en Docker con contenedores separados para cada cliente"
+required_components:
+  - base-tools
+  - user
+  - ssh
+  - ufw
+  - fail2ban
+  - nginx-ssl
+  - nodejs
+  - homebrew
+  - zsh-starship
+  - ai-tools
+  - docker
+  - backups
+  - monitoring
+  - logrotate
+path_specific_notes:
+  - "Each client gets their own container with separate DB container"
+  - "Docker volumes for persistent storage"
+  - "Network isolation between client containers"

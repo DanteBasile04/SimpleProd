@@ -1,0 +1,9 @@
+---
+# simpleprod.ssh - SSH Hardening Role
+# CRITICAL: Domain 0 — Lockout Prevention
+# Verifies key authentication BEFORE disabling password auth
+# Verifies SSH session remains active after changes
+
+# Dependencies — user MUST exist before SSH hardening
+dependencies:
+  - role: user
