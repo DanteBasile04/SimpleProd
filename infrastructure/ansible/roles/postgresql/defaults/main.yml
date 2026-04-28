@@ -1,4 +1,5 @@
---- # defaults/main.yml
+---
+# PostgreSQL defaults
 db_name: simpleprod
 db_user: simpleprod
-db_password: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+db_password: "{{ lookup('password', 'credentials/postgres_password.txt length=15 chars=ascii_letters,digits') }}"

@@ -4,6 +4,19 @@
 # Verifies key authentication BEFORE disabling password auth
 # Verifies SSH session remains active after changes
 
-# Dependencies — user MUST exist before SSH hardening
+galaxy_info:
+  author: simpleprod
+  description: SSH hardening with lockout prevention
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - noble
+    - name: Debian
+      versions:
+        - bookworm
+
 dependencies:
   - role: user

@@ -1,2 +1,4 @@
---- # defaults/main.yml
-# No defaults needed for this role
+---
+# Nginx SSL defaults
+simpleprod_nginx_server_name: "_"
+simpleprod_nginx_proxy_port: 3000

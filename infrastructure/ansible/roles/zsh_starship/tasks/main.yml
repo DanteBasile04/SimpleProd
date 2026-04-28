@@ -8,13 +8,30 @@
 
 - name: Set zsh as default shell
   ansible.builtin.user:
-    name: "{{ user_name }}"
+    name: "{{ simpleprod_user }}"
     shell: /bin/zsh
   become: true
 
 - name: Install Starship
   ansible.builtin.shell: curl -sS https://starship.rs/install.sh | sh
   args:
-    creates: /home/{{ user_name }}/.config/starship.toml
+    creates: /usr/local/bin/starship
   become: true
-  become_user: "{{ user_name }}"
+
+- name: Create Starship config directory
+  ansible.builtin.file:
+    path: /home/{{ simpleprod_user }}/.config
+    state: directory
+    mode: '0755'
+    owner: "{{ simpleprod_user }}"
+    group: "{{ simpleprod_user }}"
+  become: true
+
+- name: Configure Starship
+  ansible.builtin.template:
+    src: starship.toml.j2
+    dest: /home/{{ simpleprod_user }}/.config/starship.toml
+    owner: "{{ simpleprod_user }}"
+    group: "{{ simpleprod_user }}"
+    mode: '0644'
+  become: true

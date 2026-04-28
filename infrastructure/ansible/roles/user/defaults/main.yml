@@ -1,2 +1,4 @@
---- # defaults/main.yml
-user_name: simpleprod
+---
+# User role defaults — username comes from group_vars/all.yml (simpleprod_user)
+# Only local defaults for this role
+simpleprod_user_shell: /bin/bash

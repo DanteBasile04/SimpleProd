@@ -1,7 +1,6 @@
 ---
 # Default variables for SSH hardening role
-simpleprod_ssh_port: 22
-simpleprod_ssh_user: deploy
+# simpleprod_ssh_user and simpleprod_ssh_port come from group_vars/all.yml
 simpleprod_ssh_permit_root_login: "no"
 simpleprod_ssh_password_authentication: "no"
 simpleprod_ssh_max_auth_tries: 3

@@ -2,6 +2,15 @@
 - name: SimpleProd — Full site provisioning
   hosts: all
   become: true
+  pre_tasks:
+    - name: Verify OS compatibility
+      ansible.builtin.assert:
+        that: ansible_os_family == "Debian"
+        fail_msg: >-
+          SimpleProd only supports Debian/Ubuntu.
+          Detected: {{ ansible_os_family }}
+        quiet: yes
+
   roles:
     - base-tools
     - user

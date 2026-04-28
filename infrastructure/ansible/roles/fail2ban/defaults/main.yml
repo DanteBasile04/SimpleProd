@@ -1,2 +1,5 @@
---- # defaults/main.yml
-ssh_port: 22
+---
+# Fail2Ban defaults — port comes from group_vars/all.yml (simpleprod_ssh_port)
+simpleprod_fail2ban_bantime: 3600
+simpleprod_fail2ban_findtime: 600
+simpleprod_fail2ban_maxretry: 3

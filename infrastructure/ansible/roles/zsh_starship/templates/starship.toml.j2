@@ -1,0 +1,39 @@
+# SimpleProd — Starship Prompt Configuration
+# Clean, fast, informative prompt for productivity
+
+add_newline = true
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+symbol = " "
+
+[git_status]
+modified = "!"
+staged = "+"
+ahead = "⇡"
+behind = "⇣"
+
+[nodejs]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rust]
+symbol = " "
+
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration]($style) "
+
+[time]
+disabled = false
+format = "[$time]($style) "
+time_format = "%H:%M"

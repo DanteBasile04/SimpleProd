@@ -1,2 +1,3 @@
---- # defaults/main.yml
-ssh_port: 22
+---
+# UFW defaults — port comes from group_vars/all.yml (simpleprod_ssh_port)
+# No local port variable to avoid inconsistency with SSH role

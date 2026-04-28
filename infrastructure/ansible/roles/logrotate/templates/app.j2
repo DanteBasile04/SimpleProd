@@ -1,0 +1,12 @@
+# SimpleProd — Application Logrotate Configuration
+/var/log/simpleprod/*.log {
+    daily
+    missingok
+    rotate 30
+    compress
+    delaycompress
+    notifempty
+    create 0644 {{ simpleprod_user }} {{ simpleprod_user }}
+    dateext
+    dateformat -%Y%m%d
+}

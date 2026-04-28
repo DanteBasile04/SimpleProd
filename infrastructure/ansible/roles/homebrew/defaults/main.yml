@@ -1,2 +1,2 @@
 --- # defaults/main.yml
-user_name: simpleprod
+# Username comes from group_vars/all.yml (simpleprod_user)

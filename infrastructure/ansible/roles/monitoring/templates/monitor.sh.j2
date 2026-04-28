@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# SimpleProd — System Monitoring Script
+# Checks disk, RAM, CPU, and critical services
+set -euo pipefail
+
+THRESHOLD_DISK=90
+THRESHOLD_RAM=90
+THRESHOLD_CPU=90
+
+# Disk usage
+disk_usage() {
+    df -h / | awk 'NR==2 {print $5}' | tr -d '%'
+}
+
+# RAM usage
+ram_usage() {
+    free | awk '/Mem:/ {printf "%.0f", $3/$2 * 100}'
+}
+
+# CPU usage (1-minute load average * 100 / cores)
+cpu_usage() {
+    awk -v n="$(nproc)" '/load avg/ {printf "%.0f", $2 * 100 / n}' /proc/loadavg 2>/dev/null || echo 0
+}
+
+# Check services
+check_services() {
+    for svc in ssh ufw fail2ban; do
+        if ! systemctl is-active --quiet "$svc" 2>/dev/null; then
+            echo "CRITICAL: Service $svc is NOT running"
+        fi
+    done
+}
+
+# Main checks
+disk=$(disk_usage)
+ram=$(ram_usage)
+cpu=$(cpu_usage)
+
+[[ $disk -ge $THRESHOLD_DISK ]] && echo "WARNING: Disk usage at ${disk}% (threshold: ${THRESHOLD_DISK}%)"
+[[ $ram -ge $THRESHOLD_RAM ]] && echo "WARNING: RAM usage at ${ram}% (threshold: ${THRESHOLD_RAM}%)"
+[[ $cpu -ge $THRESHOLD_CPU ]] && echo "WARNING: CPU usage at ${cpu}% (threshold: ${THRESHOLD_CPU}%)"
+
+check_services

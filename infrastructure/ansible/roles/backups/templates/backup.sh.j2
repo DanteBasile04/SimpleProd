@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# SimpleProd — Database Backup Script
+# Backs up PostgreSQL databases with rotation
+set -euo pipefail
+
+BACKUP_DIR="/var/backups/simpleprod/db"
+RETENTION_DAYS=7
+DB_NAME="{{ db_name }}"
+DB_USER="{{ db_user }}"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+# Create backup directory
+mkdir -p "$BACKUP_DIR"
+
+# PostgreSQL backup
+pg_dump -U "$DB_USER" "$DB_NAME" | gzip > "${BACKUP_DIR}/${DB_NAME}_${TIMESTAMP}.sql.gz"
+
+# Rotate old backups
+find "$BACKUP_DIR" -name "*.sql.gz" -mtime +"$RETENTION_DAYS" -delete
+
+echo "Backup completed: ${DB_NAME}_${TIMESTAMP}.sql.gz"

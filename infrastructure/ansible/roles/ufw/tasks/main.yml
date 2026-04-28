@@ -2,7 +2,7 @@
 - name: Allow SSH port
   community.general.ufw:
     rule: allow
-    port: "{{ ssh_port }}"
+    port: "{{ simpleprod_ssh_port }}"
     proto: tcp
   become: true
 
@@ -20,7 +20,7 @@
     proto: tcp
   become: true
 
-- name: Enable UFW deny-all
+- name: Enable UFW deny-all (after SSH is allowed — Domain 0 safety)
   community.general.ufw:
     state: enabled
     policy: deny

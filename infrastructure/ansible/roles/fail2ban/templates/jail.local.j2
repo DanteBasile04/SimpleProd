@@ -1,0 +1,13 @@
+# SimpleProd — Fail2Ban SSH Jail Configuration
+# Domain 0 Safety: monitors the ACTUAL SSH port (not hardcoded 22)
+
+[DEFAULT]
+bantime = {{ simpleprod_fail2ban_bantime }}
+findtime = {{ simpleprod_fail2ban_findtime }}
+maxretry = {{ simpleprod_fail2ban_maxretry }}
+
+[sshd]
+enabled = true
+port = {{ simpleprod_ssh_port }}
+logpath = %(sshd_log)s
+backend = systemd

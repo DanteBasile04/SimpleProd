@@ -52,14 +52,15 @@ sp_msg() {
 
     local msg=""
     if [[ -f "${msg_file}" ]]; then
-        msg="$(grep -A1 "^  ${leaf_key}:" "${msg_file}" 2>/dev/null | tail -1 | sed 's/.*: *//' | tr -d '"')"
+        # Extract value from the SAME line (inline YAML values, not multiline block scalars)
+        msg="$(grep "^  ${leaf_key}:" "${msg_file}" 2>/dev/null | head -1 | sed "s/^  ${leaf_key}: *//" | sed 's/^"//;s/"$//')"
     fi
 
     # Default to English if message not found
     if [[ -z "${msg}" && "${SP_LANG}" != "en" ]]; then
         local en_file="${_SP_MSG_DIR_DEFAULT}/en.yaml"
         if [[ -f "${en_file}" ]]; then
-            msg="$(grep -A1 "^  ${leaf_key}:" "${en_file}" 2>/dev/null | tail -1 | sed 's/.*: *//' | tr -d '"')"
+            msg="$(grep "^  ${leaf_key}:" "${en_file}" 2>/dev/null | head -1 | sed "s/^  ${leaf_key}: *//" | sed 's/^"//;s/"$//')"
         fi
     fi
 
@@ -133,11 +134,24 @@ sp_log_progress() {
 # ============================================================================
 
 sp_banner() {
+    # Read version from VERSION file (common/ -> bash/ -> infrastructure/ -> project root)
+    local version_file="${_SP_COMMON_DIR}/../../../VERSION"
+    local sp_version="v0.1.0"
+    if [[ -f "${version_file}" ]]; then
+        sp_version="v$(cat "${version_file}")"
+    fi
+
+    local inner_width=40
+    local title="SimpleProd ${sp_version}"
+    local subtitle="VPS Production Setup Bundle"
+    local title_pad=$(( (inner_width - ${#title}) / 2 ))
+    local sub_pad=$(( (inner_width - ${#subtitle}) / 2 ))
+
     echo -e "${SP_BOLD}${SP_CYAN}"
-    echo "  ╔══════════════════════════════════════╗"
-    echo "  ║          SimpleProd v1.0.0            ║"
-    echo "  ║   VPS Production Setup Bundle        ║"
-    echo "  ╚══════════════════════════════════════╝"
+    echo "  ╔$(printf '═%.0s' $(seq 1 "${inner_width}"))╗"
+    echo "  ║$(printf '%*s' "${title_pad}")${title}$(printf '%*s' $(( inner_width - title_pad - ${#title} )))║"
+    echo "  ║$(printf '%*s' "${sub_pad}")${subtitle}$(printf '%*s' $(( inner_width - sub_pad - ${#subtitle} )))║"
+    echo "  ╚$(printf '═%.0s' $(seq 1 "${inner_width}"))╝"
     echo -e "${SP_NC}"
     sp_log_info "$(sp_msg "config.wizard_prompt")"
     echo ""

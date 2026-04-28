@@ -1,17 +1,17 @@
 --- # tasks/main.yml
 - name: Create non-root user
   ansible.builtin.user:
-    name: "{{ user_name }}"
-    shell: /bin/bash
+    name: "{{ simpleprod_user }}"
+    shell: "{{ simpleprod_user_shell }}"
     groups: sudo
     append: yes
     state: present
 
 - name: Set up SSH directory
   ansible.builtin.file:
-    path: "/home/{{ user_name }}/.ssh"
+    path: "/home/{{ simpleprod_user }}/.ssh"
     state: directory
     mode: '0700'
-    owner: "{{ user_name }}"
-    group: "{{ user_name }}"
+    owner: "{{ simpleprod_user }}"
+    group: "{{ simpleprod_user }}"
   become: true

@@ -1,0 +1,6 @@
+---
+# SimpleProd — Shared variables across all roles
+# These can be overridden in inventory group_vars or host_vars
+
+simpleprod_user: deploy
+simpleprod_ssh_port: 22

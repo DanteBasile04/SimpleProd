@@ -4,20 +4,20 @@
   args:
     creates: /home/linuxbrew/.linuxbrew/bin/brew
   become: true
-  become_user: "{{ user_name }}"
+  become_user: "{{ simpleprod_user }}"
 
 - name: Add brew to PATH in .bashrc
   ansible.builtin.lineinfile:
-    path: /home/{{ user_name }}/.bashrc
+    path: /home/{{ simpleprod_user }}/.bashrc
     line: 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"'
     create: yes
   become: true
-  become_user: "{{ user_name }}"
+  become_user: "{{ simpleprod_user }}"
 
 - name: Add brew to PATH in .zshrc
   ansible.builtin.lineinfile:
-    path: /home/{{ user_name }}/.zshrc
+    path: /home/{{ simpleprod_user }}/.zshrc
     line: 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"'
     create: yes
   become: true
-  become_user: "{{ user_name }}"
+  become_user: "{{ simpleprod_user }}"

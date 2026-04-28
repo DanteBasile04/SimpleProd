@@ -1,2 +1,3 @@
---- # defaults/main.yml
-user_name: simpleprod
+---
+# Zsh + Starship defaults
+# Username comes from group_vars/all.yml (simpleprod_user)
