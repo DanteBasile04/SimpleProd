@@ -27,6 +27,9 @@ main() {
     sp_manifest_start
     
     # Execute each setup script in dependency order
+    local total_steps=5
+    local current_step=0
+
     for script in \
         setup-base-tools.sh \
         setup-user.sh \
@@ -34,11 +37,11 @@ main() {
         setup-ufw.sh \
         setup-fail2ban.sh; do
         
+        current_step=$((current_step + 1))
         sp_log_info "Running ${script}..."
         "${SCRIPT_DIR}/adapters/${script}"
         
-        # Show progress
-        sp_log_progress "$(grep -c "^sp_log_step" "${SCRIPT_DIR}/adapters/${script}")" "5" "${script}"
+        sp_log_progress "${current_step}" "${total_steps}" "${script}"
     done
     
     sp_log_success "All setup scripts executed successfully"
