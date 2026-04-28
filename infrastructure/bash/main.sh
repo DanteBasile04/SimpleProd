@@ -3,10 +3,11 @@ set -euo pipefail
 
 # Source common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/../common/safety.sh"
-source "${SCRIPT_DIR}/../common/backup.sh"
-source "${SCRIPT_DIR}/../common/logging.sh"
-source "${SCRIPT_DIR}/../common/secrets.sh"
+COMMON_DIR="${SCRIPT_DIR}/common"
+source "${COMMON_DIR}/safety.sh"
+source "${COMMON_DIR}/backup.sh"
+source "${COMMON_DIR}/logging.sh"
+source "${COMMON_DIR}/secrets.sh"
 
 # Config from environment (defaults from defaults.yaml)
 SP_DRY_RUN="${SP_DRY_RUN:-false}"
@@ -34,10 +35,10 @@ main() {
         setup-fail2ban.sh; do
         
         sp_log_info "Running ${script}..."
-        "${SCRIPT_DIR}/${script}"
+        "${SCRIPT_DIR}/adapters/${script}"
         
         # Show progress
-        sp_log_progress "$(grep -c "^sp_log_step" "${SCRIPT_DIR}/${script}")" "5" "${script}"
+        sp_log_progress "$(grep -c "^sp_log_step" "${SCRIPT_DIR}/adapters/${script}")" "5" "${script}"
     done
     
     sp_log_success "All setup scripts executed successfully"

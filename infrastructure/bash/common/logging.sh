@@ -33,12 +33,17 @@ fi
 # Message Functions (language-aware)
 # ============================================================================
 
+# Resolve message directory from this file's location (common/)
+# common/ -> bash/ -> infrastructure/ -> project root -> application/config/messages
+_SP_COMMON_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_SP_MSG_DIR_DEFAULT="${_SP_COMMON_DIR}/../../../application/config/messages"
+
 # Get a message from the messages YAML file
 # Usage: sp_msg "preflight.os_supported" "os=Ubuntu version=22.04"
 sp_msg() {
     local key="${1}"
     shift
-    local msg_file="${SP_MSG_DIR:-$(dirname "$0")/../../../application/config/messages}/${SP_LANG}.yaml"
+    local msg_file="${SP_MSG_DIR:-${_SP_MSG_DIR_DEFAULT}}/${SP_LANG}.yaml"
 
     # Simple YAML key lookup — search for the nested key
     # key format: "preflight.os_supported" -> search for "os_supported:"
@@ -52,7 +57,7 @@ sp_msg() {
 
     # Default to English if message not found
     if [[ -z "${msg}" && "${SP_LANG}" != "en" ]]; then
-        local en_file="${SP_MSG_DIR:-$(dirname "$0")/../../../application/config/messages}/en.yaml"
+        local en_file="${_SP_MSG_DIR_DEFAULT}/en.yaml"
         if [[ -f "${en_file}" ]]; then
             msg="$(grep -A1 "^  ${leaf_key}:" "${en_file}" 2>/dev/null | tail -1 | sed 's/.*: *//' | tr -d '"')"
         fi
