@@ -1,0 +1,18 @@
+---
+# SimpleProd — Test inventory for Vagrant VM (all-in-one)
+# Runs locally on the VM (not via SSH from host)
+
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+  children:
+    web:
+      hosts:
+        localhost:
+    db:
+      hosts:
+        localhost:
+    app:
+      hosts:
+        localhost:

@@ -1,7 +1,9 @@
 --- # tasks/main.yml
-- name: Install PostgreSQL
+- name: Install PostgreSQL and dependencies
   ansible.builtin.apt:
-    name: postgresql
+    name:
+      - postgresql
+      - python3-psycopg2
     state: present
     update_cache: yes
   become: true

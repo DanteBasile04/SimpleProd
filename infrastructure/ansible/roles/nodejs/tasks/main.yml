@@ -13,9 +13,12 @@
   become: true
   become_user: "{{ simpleprod_user }}"
 
-- name: Install PM2
-  community.general.npm:
-    name: pm2
-    global: yes
+- name: Install PM2 (via nvm)
+  ansible.builtin.shell: |
+    export NVM_DIR="/home/{{ simpleprod_user }}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+    npm install -g pm2
+  args:
+    executable: /bin/bash
   become: true
   become_user: "{{ simpleprod_user }}"

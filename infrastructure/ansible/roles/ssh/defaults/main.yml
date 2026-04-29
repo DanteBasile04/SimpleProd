@@ -1,10 +1,3 @@
 ---
-# Default variables for SSH hardening role
-# simpleprod_ssh_user and simpleprod_ssh_port come from group_vars/all.yml
-simpleprod_ssh_permit_root_login: "no"
-simpleprod_ssh_password_authentication: "no"
-simpleprod_ssh_max_auth_tries: 3
-simpleprod_ssh_max_sessions: 2
-simpleprod_ssh_client_alive_interval: 300
-simpleprod_ssh_client_alive_count_max: 2
-simpleprod_ssh_x11_forwarding: "no"
+# SSH hardening role — all variables inherited from group_vars/all.yml
+# Only role-specific overrides here

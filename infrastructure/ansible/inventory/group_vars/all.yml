@@ -1,6 +1,30 @@
 ---
 # SimpleProd — Shared variables across all roles
-# These can be overridden in inventory group_vars or host_vars
+# These can be overridden in host_vars or passed via -e
 
+# User management
 simpleprod_user: deploy
+simpleprod_user_shell: /bin/bash
+
+# SSH hardening
+simpleprod_ssh_user: "{{ simpleprod_user }}"
 simpleprod_ssh_port: 22
+simpleprod_ssh_permit_root_login: "no"
+simpleprod_ssh_password_authentication: "no"
+simpleprod_ssh_max_auth_tries: 3
+simpleprod_ssh_max_sessions: 2
+simpleprod_ssh_client_alive_interval: 300
+simpleprod_ssh_x11_forwarding: "no"
+
+# Fail2Ban
+simpleprod_fail2ban_bantime: 3600
+simpleprod_fail2ban_findtime: 600
+simpleprod_fail2ban_maxretry: 3
+
+# Nginx SSL
+simpleprod_nginx_server_name: "_"
+simpleprod_nginx_proxy_port: 3000
+
+# PostgreSQL
+db_name: simpleprod
+db_user: simpleprod

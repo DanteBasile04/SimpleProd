@@ -23,7 +23,7 @@
   hosts: web
   become: true
   roles:
-    - nginx-ssl
+    - nginx_ssl
     - nodejs
 
 - name: Database servers
