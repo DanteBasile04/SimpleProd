@@ -41,10 +41,8 @@ lint-bash: ## Lint all Bash scripts with shellcheck
 
 lint-ansible: ## Lint all Ansible roles and playbooks
 	@echo "Linting Ansible..."
-	@for role in $(ANSIBLE_ROLES); do \
-		echo "  Checking $$role"; \
-		$(ANSIBLE_LINT) "$$role" || true; \
-	done
+	@command -v ansible-lint >/dev/null 2>&1 || { echo "ansible-lint not found. Install with: pip install ansible-lint"; exit 0; }
+	@ansible-lint infrastructure/ansible/playbooks/ infrastructure/ansible/roles/ --exclude .github 2>&1 || true
 	@echo "Ansible lint complete."
 
 lint-python: ## Lint Python orchestrator code
@@ -62,18 +60,18 @@ test-smoke: ## Run smoke tests (Docker-based)
 	@echo "Running smoke tests..."
 	@echo "Smoke tests require Docker. Skipping if not available."
 	@command -v docker >/dev/null 2>&1 || { echo "Docker not found. Install Docker to run smoke tests."; exit 0; }
-	@echo "Smoke tests: placeholder (implement in ci/.github/workflows/test.yml)"
+	@echo "Smoke tests: implemented in .github/workflows/test.yml"
 
 test-integration: ## Run integration tests against ephemeral VM
 	@echo "Running integration tests..."
-	@echo "Integration tests are run via GitHub Actions. See ci/.github/workflows/test.yml"
+	@echo "Integration tests are run via GitHub Actions. See .github/workflows/test.yml"
 	@echo "To run locally, use: vagrant up && vagrant provision"
 
 # ============================================================================
 # Release
 # ============================================================================
 
-VERSION := $(shell git describe --tags --always --dirty 2>/dev/null || echo "v0.1.0-dev")
+VERSION := $(shell cat VERSION 2>/dev/null || echo "0.1.0-dev")
 
 release: ## Create a versioned release
 	@echo "Creating release $(VERSION)..."

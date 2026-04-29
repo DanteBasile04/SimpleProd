@@ -1,0 +1,95 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  yaml-syntax:
+    name: YAML Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse all YAML files
+        run: |
+          python3 -c "
+          import yaml, pathlib, sys
+          errors = 0
+          for f in pathlib.Path('.').rglob('*.yml'):
+              if '.github' in str(f) or '__pycache__' in str(f):
+                  continue
+              try:
+                  with open(f) as fh:
+                      yaml.safe_load(fh)
+              except Exception as e:
+                  print(f'FAIL: {f}: {e}')
+                  errors += 1
+          if errors:
+              print(f'{errors} YAML files failed')
+              sys.exit(1)
+          print('All YAML files OK')
+          "
+
+  bash-syntax:
+    name: Bash Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check all bash scripts
+        run: |
+          errors=0
+          while IFS= read -r script; do
+            if ! bash -n "$script" 2>/dev/null; then
+              echo "FAIL: $script"
+              errors=$((errors + 1))
+            fi
+          done < <(find infrastructure/bash -name "*.sh" -type f)
+          if [ "$errors" -gt 0 ]; then
+            echo "$errors bash scripts failed syntax check"
+            exit 1
+          fi
+          echo "All bash scripts OK"
+
+  ansible-syntax:
+    name: Ansible Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Ansible
+        run: pip install ansible
+      - name: Syntax check playbooks
+        run: |
+          ansible-playbook -i infrastructure/ansible/inventory/vagrant.yml \
+            infrastructure/ansible/playbooks/site.yml --syntax-check
+
+  python-imports:
+    name: Python Import Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install questionary rich click pyyaml
+      - name: Check Python imports
+        run: |
+          cd infrastructure/python
+          python3 -c "
+          from simpleprod.i18n import get_message
+          from simpleprod.orchestrator.config_resolver import resolve_config
+          from simpleprod.orchestrator.resolver import resolve_steps
+          from simpleprod.orchestrator.preflight import check_os
+          from simpleprod.tui.display import show_safety_summary
+          
+          c = resolve_config(cli_path='docker', cli_user='deploy', cli_lang='en')
+          assert c['path'] == 'docker'
+          steps = resolve_steps(c)
+          assert len(steps) == 8
+          assert 'ssh' in steps
+          assert 'ufw' in steps
+          print(f'OK: {len(steps)} steps resolved, all imports verified')
+          "
