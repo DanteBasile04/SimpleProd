@@ -1,34 +1,17 @@
-# Safety Documentation
+# SimpleProd — Safety Documentation
 
-## Why Domain 0 Exists
-Domain 0 is the most secure area of your system, isolated from all other domains. It contains only the essential tools needed for system administration.
+> 📖 The canonical safety documentation is now at **[SAFETY.md](../../SAFETY.md)** in the project root.
 
-## Lockout Prevention Explained
-SimpleProd ensures you never get locked out by:
-- Maintaining key-based authentication
-- Disabling password authentication
-- Providing emergency access methods
+This file is kept for backwards compatibility. Please refer to the root SAFETY.md for the complete Domain 0 safety documentation covering:
 
-## Pre-flight Checks Explained
-Before any critical operation, SimpleProd performs:
-- System health checks
-- Dependency verification
-- Configuration validation
+- SSH Lockout Prevention (7-step process)
+- UFW Firewall Safety (allow first, deny later)
+- Pre-flight Checks (root, OS, internet, disk, RAM)
+- Auto-Backup and Rollback
+- Dry-Run Mode
+- Failure Handling (retry/skip/rollback/abort)
+- Secret Management
+- GitHub Actions CI/CD safety enforcement
+- Safety Checklist for production
 
-## Step Failure Handling Explained
-If a step fails, SimpleProd:
-- Rolls back changes
-- Provides detailed error messages
-- Offers recovery options
-
-## Backup and Rollback Explained
-SimpleProd maintains:
-- Regular backups of critical data
-- Point-in-time recovery options
-- Automated rollback procedures
-
-## Secret Management Explained
-SimpleProd handles secrets by:
-- Encrypting sensitive data
-- Using secure storage mechanisms
-- Providing access controls
+All mechanisms are documented with code examples from Bash, Ansible, and Python adapters.
