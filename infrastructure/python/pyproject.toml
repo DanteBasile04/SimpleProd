@@ -1,17 +1,19 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "simpleprod"
 version = "0.1.0"
 description = "SimpleProd TUI and orchestrator"
-authors = ["Your Name <your.email@example.com>"]
-license = "MIT"
-readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.1.3",
+    "questionary>=1.10.0",
+    "rich>=12.6.0",
+    "pyyaml>=6.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-click = "^8.1.3"
-questionary = "^1.10.0"
-rich = "^12.6.0"
-pyyaml = "^6.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 simpleprod = "simpleprod.cli:main"

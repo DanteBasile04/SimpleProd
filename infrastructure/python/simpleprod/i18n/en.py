@@ -37,6 +37,9 @@ MESSAGES = {
     }
 }
 
+
 def get_message(lang: str, key: str) -> str:
     """Get localized message"""
-    return MESSAGES.get(lang, MESSAGES["en"]).get(key, key)
+    if lang not in MESSAGES:
+        lang = "en"
+    return MESSAGES[lang].get(key, key)
